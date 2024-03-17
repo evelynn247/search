@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.biyao.search.bs.server.mysql.dao.mapper.BrandWordMapper">
+    <select id="getInfoByPage" resultType="com.biyao.search.bs.server.mysql.model.BrandWordPO">
+        select
+        id as id,
+        brand_word as brandWord,
+        rewrite_word as rewriteWord
+        from search_brand_word
+        where status=1
+        order by id asc limit ${pageIndex},${pageSize}
+    </select>
+</mapper>

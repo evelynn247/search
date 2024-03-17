@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.biyao.search.bs.server.mysql.dao.mapper.SearchTermMapper">
+    <resultMap id="searchTermResultMap" type="com.biyao.search.bs.server.mysql.model.SearchTermPO">
+        <id property="termId" column="term_id"/>
+        <result property="term" column="term"/>
+        <result property="synonyms" column="synonym"/>
+        <result property="hypernyms" column="hypernym"/>
+        <result property="hyponyms" column="hyponym"/>
+        <result property="productTag" column="product_tag"/>
+        <result property="brandTag" column="brand_tag"/>
+        <result property="sexTag" column="sex_tag"/>
+        <result property="seasonTag" column="season_tag"/>
+        <result property="functionTag" column="function_tag"/>
+        <result property="attributeTag" column="attribute_tag"/>
+        <result property="combineSex" column="combine_sex"/>
+        <result property="combineSeason" column="combine_season"/>
+        <result property="status" column="status"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="createBy" column="create_by"/>
+        <result property="updateBy" column="update_by"/>
+    </resultMap>
+
+    <select id="getSearchTermByCombineSeasonOrSexCondition" resultMap="searchTermResultMap"
+            parameterType="com.biyao.search.bs.server.mysql.model.CombineSeasonOrSexCondition">
+         select * from search_term where  status=1 and term_id>${termId} and (combine_sex =${combineSex} or combine_season=${combineSeason})
+         order by term_id asc limit 1000
+    </select>
+
+    <!--
+        <select id="getSearchTermByCondition" resultType="com.biyao.search.bs.server.mysql.model.SearchTermPO"
+                parameterType="com.biyao.search.bs.server.term.model.CombineSeasonOrSexConditionrSexCondition         select
+            term_id as termId,
+            term as term,
+            synonym as synonyms,
+            hypernym as hypernyms,
+            hyponym as hyponyms,
+            product_tag as productTag,
+            brand_tag as brandTag,
+            sex_tag as sexTag,
+            season_tag as seasonTag,
+            function_tag as functionTag,
+            attribute_tag as attributeTag,
+            combine_sex as combineSex,
+            combine_season as combineSeason,
+            status as status,
+            create_time as createTime,
+            update_time as updateTime,
+            create_by as createBy,
+            update_by as updateBy
+            from search_term
+            where status=1 and term_id>${termId} and (
+            combine_season=${combineSeason}
+            <if test="combineSex != null">
+                or combine_sex=${combineSex}
+            </if>
+            )
+            order by term_id asc limit 1000
+        </select>
+            -->
+</mapper>

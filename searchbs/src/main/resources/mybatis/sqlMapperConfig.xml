@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <settings>
+        <!--开启驼峰命令规则自动转换功能 例如：create_time > createTime-->
+        <setting name="mapUnderscoreToCamelCase" value="false"/>
+    </settings>
+    <mappers>
+        <mapper resource="mybatis/SearchTermMapper.xml"/>
+        <mapper resource="mybatis/CategoryPredictionMapper.xml"/>
+        <mapper resource="mybatis/BrandWordMapper.xml"/>
+        <mapper resource="mybatis/ProductWordMapper.xml"/>
+        <mapper resource="mybatis/TermSynonymMapper.xml"/>
+    </mappers>
+</configuration>

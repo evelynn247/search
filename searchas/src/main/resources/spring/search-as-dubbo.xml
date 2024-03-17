@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+	http://code.alibabatech.com/schema/dubbo        
+    http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+
+ 	<!-- 消费方应用名，用于计算依赖关系，不是匹配条件，不要与提供方一样 -->
+   <dubbo:application name="search-as" version="1.0" owner="luozhuo" organization="BI"/>
+ 
+ 	 <!-- 使用zookeeper注册中心暴露服务地址 -->
+    <dubbo:registry protocol="zookeeper" address="${zk.address}" timeout="50000"/>
+   
+    <!-- 用dubbo协议在20880端口暴露服务 -->
+    <dubbo:protocol name="dubbo" port="-1" charset="UTF-8" payload="16777216" threads="400"/>
+
+    <dubbo:protocol name="rest" port="${search_as.port}" server="${search_as.server}" keepalive="false"/>
+    
+    <!-- 声明需要暴露的服务接口 -->
+    <dubbo:service interface="com.biyao.search.as.service.ASSearchService" ref="asSearchService"
+                   owner="luozhuo" version="${search_as.version}"
+                   loadbalance="random" retries="0" group="${search_as.group}" timeout="10000" protocol="dubbo"/>
+                   
+    <dubbo:service interface="com.biyao.search.as.service.ASDesignerSearchService" ref="asDesignerSearchService"
+                   owner="luozhuo" version="${search_as.version}"
+                   loadbalance="random" retries="0" group="${search_as.group}" timeout="10000" protocol="dubbo"/>
+                   
+    <dubbo:service interface="com.biyao.search.as.service.ASDesignerProductSearchService" ref="asDesignerProductSearchService"
+                   owner="luozhuo" version="${search_as.version}"
+                   loadbalance="random" retries="0" group="${search_as.group}" timeout="10000" protocol="dubbo"/>
+                   
+    <dubbo:service interface="com.biyao.search.as.service.ASMainSearchService" ref="asMainService"
+                   owner="luozhuo" version="${search_as.version}"
+                   loadbalance="random" retries="0" group="${search_as.group}" timeout="5000" protocol="dubbo"/>
+
+    <dubbo:service interface="com.biyao.search.as.server.controller.TestController"
+                   version="${search_as.version}" group="${search_as.group}" ref="testControllerImpl" protocol="rest"/>
+                   
+    <dubbo:reference id="bsSearchService" interface="com.biyao.search.bs.service.BSSearchService"
+        version="${search_bs.version}" group="${search_bs.group}" timeout="5000" check="false"/>
+    <dubbo:reference id="bsDesignerProductSearchService" interface="com.biyao.search.bs.service.BSDesignerProductSearchService"
+        version="${search_bs.version}" group="${search_bs.group}" timeout="5000" check="false"/>
+    <dubbo:reference id="bsDesignerSearchService" interface="com.biyao.search.bs.service.BSDesignerSearchService"
+        version="${search_bs.version}" group="${search_bs.group}" timeout="5000" check="false"/>
+        
+    <dubbo:reference id="productMatch" interface="com.biyao.search.bs.service.ProductMatch"
+        version="${search_bs.version}" group="${search_bs.group}" timeout="5000" check="false" retries="2" />
+    <dubbo:reference id="newProductMatch" interface="com.biyao.search.bs.service.NewProductMatch"
+                  version="${search_bs.version}" group="${search_bs.group}" timeout="5000" check="false" retries="2" />
+    <dubbo:reference id="tagProductMatch" interface="com.biyao.search.bs.service.TagProductMatch"
+    	version="${search_bs.version}" group="${search_bs.group}" timeout="5000" check="false" retries="2" />
+    <dubbo:reference id="partialQueryFetch" interface="com.biyao.search.bs.service.PartialQueryFetch"
+        version="${search_bs.version}" group="${search_bs.group}" timeout="5000" check="false" retries="2" />
+    <dubbo:reference id="textLinkMatch" interface="com.biyao.search.bs.service.TextLinkMatch"
+        version="${search_bs.version}" group="${search_bs.group}" timeout="5000" check="false" retries="2" />
+    <dubbo:reference id="topicMatch" interface="com.biyao.search.bs.service.TopicMatch"
+        version="${search_bs.version}" group="${search_bs.group}" timeout="5000" check="false" retries="2" />
+    <dubbo:reference id="topicProductMatch" interface="com.biyao.search.bs.service.TopicProductMatch"
+        version="${search_bs.version}" group="${search_bs.group}" timeout="5000" check="false" retries="2" />
+    <dubbo:reference id="facetQuery" interface="com.biyao.search.bs.service.FacetQuery"
+        version="${search_bs.version}" group="${search_bs.group}" timeout="5000" check="false" retries="2" />
+    <dubbo:reference id="ucService" interface="com.biyao.uc.service.UcServerService"
+                     protocol="dubbo" timeout="800" retries="2" check="false" group="${uc.group}" version="1.0" />
+ <!-- pdc 商品服务 -->
+ <dubbo:reference id="productDubboService" interface="com.biyao.client.service.IProductDubboService"
+                  group="${pdc.group}"
+                  version="${pdc.version}" timeout="30000" retries="1" check="false"/>
+</beans>

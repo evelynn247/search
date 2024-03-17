@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.biyao.search.bs.server.mysql.dao.mapper.ProductWordMapper">
+    <select id="getInfoByPage" resultType="com.biyao.search.bs.server.mysql.model.ProductWordPO">
+        select
+        id as id,
+        product_word as productWord,
+        related_word as relatedWord
+        from search_product_word
+        where status=1
+        order by id asc limit ${pageIndex},${pageSize}
+    </select>
+</mapper>
